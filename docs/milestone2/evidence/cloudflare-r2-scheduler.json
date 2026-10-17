@@ -1,0 +1,13 @@
+﻿{
+    "archive_sha256":  "05ff204407f23ac0b93a77c32b267b3fd3179f363ff340dafa7091b72a600560",
+    "requires":  "Provisioning user signed in; owned MySQL clone; Docker for local S3 and Internet/R2 for off-host copy",
+    "matching_verified_archive_sha256":  true,
+    "last_run":  "2026-10-17T21:17:24.0000000+08:00",
+    "new_s3_receipt_created":  true,
+    "schedule":  "Daily 23:00",
+    "new_r2_receipt_created":  true,
+    "hard_zero_cost_guaranteed":  false,
+    "offhost_storage_verified":  true,
+    "result":  0,
+    "independently_administered_custody_proven":  false
+}

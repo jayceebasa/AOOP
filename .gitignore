@@ -1,0 +1,15 @@
+# Local builds and developer configuration. Existing tracked artifacts are preserved.
+**/.build/
+**/build/
+**/dist/
+out/
+/output/
+/tmp/
+__pycache__/
+.idea/
+*.iml
+**/nbproject/private/
+*.local.properties
+.env
+.env.*
+!.env.example

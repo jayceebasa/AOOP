@@ -1,0 +1,15 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+    {
+      "type": "shell",
+      "label": "javac build AOOP",
+      "command": "powershell",
+      "args": ["-NoProfile", "-ExecutionPolicy", "Bypass", "-File", "${workspaceFolder}/scripts/build.ps1"],
+      "group": "build",
+      "problemMatcher": [
+        "$javac"
+      ]
+    }
+  ]
+}

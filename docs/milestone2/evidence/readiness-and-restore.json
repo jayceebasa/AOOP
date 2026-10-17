@@ -1,0 +1,25 @@
+{
+  "baseline_commit": "8387a21043f422e186a2a03a932eb8f50ee364c2",
+  "restored_tables": 14,
+  "row_counts_match": true,
+  "restored_counts": {
+    "addresses": 57,
+    "attendance": 4712,
+    "compensation": 31,
+    "departments": 9,
+    "employees": 31,
+    "employeestatuses": 3,
+    "governmentids": 31,
+    "pagibigcontributions": 2,
+    "payroll": 217,
+    "philhealthcontributions": 3,
+    "positions": 20,
+    "ssscontributions": 45,
+    "taxbrackets": 6,
+    "users": 34
+  },
+  "original_aoop_counts_unchanged": true,
+  "backup_manifest": "C:\\Users\\JAYCEE\\Downloads\\AOOP_Milestone2_Group13\\private-backup\\preimplementation-20261017\\manifest.json",
+  "rollback_schema": "aoop_m2_restore_check",
+  "original_database_writes": 0
+}

@@ -1,0 +1,337 @@
+
+package oop_motorph;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.Date;
+import javax.swing.table.DefaultTableModel;
+import java.util.List;
+import javax.swing.JOptionPane;
+
+public class frm_EmpAttLeaveApproval extends javax.swing.JFrame implements WorkspaceScreen {
+
+
+    /** Code-led layout. The archived NetBeans .form layout is retired. */
+    @Override public void composeWorkspace() {
+        javax.swing.JButton back=new javax.swing.JButton("Back to attendance");back.addActionListener(e->WorkspaceShell.open(this,"requests"));
+        WorkspaceShell.mount(this,"Review leave requests","Select a pending request to approve or reject it.","requests",WorkspaceUI.table(tbl_Attendance),
+            WorkspaceUI.actions(WorkspaceUI.primary(btn_attApprove,"Approve request"),WorkspaceUI.danger(btn_attReject,"Reject request"),WorkspaceUI.secondary(back,"Back to attendance")));
+        tbl_Attendance.putClientProperty("motorph.emptyMessage","No pending requests to review. New leave requests will appear here.");
+        final boolean allowed0=btn_attApprove.isEnabled();
+        final boolean allowed1=btn_attReject.isEnabled();
+        WorkspaceUI.bindSelection(tbl_Attendance,()->{
+            boolean selected=WorkspaceUI.hasSelection(tbl_Attendance);
+            btn_attApprove.setEnabled(allowed0&&selected&&"Pending".equalsIgnoreCase(String.valueOf(tbl_Attendance.getValueAt(tbl_Attendance.getSelectedRow(),13))));
+            btn_attReject.setEnabled(allowed1&&selected&&"Pending".equalsIgnoreCase(String.valueOf(tbl_Attendance.getValueAt(tbl_Attendance.getSelectedRow(),13))));
+        });
+
+    }
+
+    public frm_EmpAttLeaveApproval() {
+        AuthorizationService.requireHr();
+        initComponents();
+        AppTheme.finish(this);
+        displayAttendanceData();
+
+        //JBF: Sets the windown to center and disable resizable
+        setLocationRelativeTo(null);
+        setResizable(false);
+        setTitle("Employees Attendance");
+
+        // Retrieve current employee details
+        EmpDetails employee = EmpUserSession.getInstance().getCurrentUser();
+
+        // Reuse the authenticated session without loading every user's credentials.
+        String role = EmpUserSession.getInstance().getRole();
+        if (employee == null || role == null) role = "EMPLOYEE";
+
+        // Set role-based access
+        setRoleBasedAccess(role);
+
+    }
+
+        public void setRoleBasedAccess(String role) {
+        // Default: Disable all buttons
+        btn_attApprove.setEnabled(false);
+        btn_attReject.setEnabled(false);
+
+        // Enable buttons based on role (case-insensitive)
+        switch (role.toUpperCase()) {
+            case "EMPLOYEE":
+                // Employees cannot approve or reject attendance
+                break;
+            case "FINANCE":
+                btn_attApprove.setEnabled(true);
+                btn_attReject.setEnabled(true);
+                break;
+            case "HR":
+                // HR can approve or reject attendance
+                btn_attApprove.setEnabled(true);
+                btn_attReject.setEnabled(true);
+                break;
+            case "DEPTHEAD":
+                // Dept-Head can approve or reject attendance
+                btn_attApprove.setEnabled(true);
+                btn_attReject.setEnabled(true);
+                break;
+            case "FINANCE TL":
+                btn_attApprove.setEnabled(true);
+                btn_attReject.setEnabled(true);
+                break;
+            case "PAYROLL MANAGER":
+                btn_attApprove.setEnabled(true);
+                btn_attReject.setEnabled(true);
+                break;
+            case "ACCOUNTING":
+                btn_attApprove.setEnabled(true);
+                btn_attReject.setEnabled(true);
+                break;
+            case "ADMIN":
+                // Admin can approve or reject attendance
+                btn_attApprove.setEnabled(true);
+                btn_attReject.setEnabled(true);
+                break;
+            default:
+                JOptionPane.showMessageDialog(this, "Invalid role: " + role, "Error", JOptionPane.ERROR_MESSAGE);
+                break;
+        }
+    }
+
+
+
+
+    private void displayAttendanceData() {
+        // get current user login
+        EmpDetails employee = EmpUserSession.getInstance().getCurrentUser();
+
+        if (employee == null) {
+            JOptionPane.showMessageDialog(this, "No employee data found!", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+         List<EmpAttLeave> attendanceList = CSVHandler.getAttendanceData();
+    DefaultTableModel model = (DefaultTableModel) tbl_Attendance.getModel();
+
+    //to disable tbl edit
+    tbl_Attendance.setDefaultEditor(Object.class, null);
+
+    // Clear existing data
+    model.setRowCount(0);
+
+    // This HR-only view shows pending requests; DAL authorization remains authoritative.
+    for (EmpAttLeave att : attendanceList) {
+        if ("Pending".equalsIgnoreCase(att.getAttendanceStatus())) {
+            model.addRow(new Object[]{
+                att.getEmpID(), att.getFirstName(), att.getLastName(), att.getEmployeeStatus(),
+                att.getPosition(), att.getImmediateSupervisor(), att.getAttDateFrom(), att.getAttDateTo(),
+                att.getTimeIn(), att.getTimeOut(), att.getHoursWorked(), att.getDuration(),
+                att.getAttendanceType(), att.getAttendanceStatus(), att.getVlCount(),
+                att.getVlUsed(), att.getVlBalance(), att.getSlCount(), att.getSlUsed(), att.getSlBalance()
+            });
+        }
+    }
+}
+
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jPanel1 = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tbl_Attendance = new javax.swing.JTable();
+        btn_attApprove = new javax.swing.JButton();
+        btn_attReject = new javax.swing.JButton();
+        jPanel3 = new javax.swing.JPanel();
+        jPanel4 = new javax.swing.JPanel();
+        jPanel5 = new javax.swing.JPanel();
+        jPanel6 = new javax.swing.JPanel();
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setBorder(javax.swing.BorderFactory.createCompoundBorder());
+
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel2.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, null, java.awt.Color.lightGray, null, null));
+
+        tbl_Attendance.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "Employee ID", "First Name", "Last Name", "Status", "Position", "Immeidate Supervisor", "Date From", "Date To", "Time In", "Time Out", "Hrs Worked", "Duration", "AttendanceType", "AttendanceStatus", "VLCount", "VLUsed", "VLBal", "SLCount", "SLUsed", "SLBal"
+            }
+        ));
+        jScrollPane1.setViewportView(tbl_Attendance);
+
+        btn_attApprove.setText("APPROVE");
+        btn_attApprove.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_attApproveActionPerformed(evt);
+            }
+        });
+
+        btn_attReject.setText("REJECT");
+        btn_attReject.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_attRejectActionPerformed(evt);
+            }
+        });
+
+
+
+        jPanel3.setBackground(new java.awt.Color(255, 255, 102));
+
+
+
+        jPanel4.setBackground(new java.awt.Color(245, 28, 71));
+
+
+
+        jPanel5.setBackground(new java.awt.Color(255, 255, 102));
+
+
+
+        jPanel6.setBackground(new java.awt.Color(255, 255, 102));
+
+
+
+        jPanel1.getAccessibleContext().setAccessibleName("Profile");
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void btn_attApproveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_attApproveActionPerformed
+        // Get the selected row index
+    int selectedRow = tbl_Attendance.getSelectedRow();
+
+    if (selectedRow != -1) { // Ensure a row is selected
+        // Get the Employee ID (assuming Employee ID is in column 0)
+        String empID = (String) tbl_Attendance.getValueAt(selectedRow, 0);
+
+        // Get the current attendance status (assuming it's in column 12)
+        String currentAttendanceStatus = (String) tbl_Attendance.getValueAt(selectedRow, 13);
+
+        // Check if the current attendance status is "Pending" before approving
+        if ("Pending".equalsIgnoreCase(currentAttendanceStatus)) {
+            // Update attendance status to "Approved"
+            String newStatus = "Approved";
+            CSVHandler.updateAttendanceStatus(empID,
+                    String.valueOf(tbl_Attendance.getValueAt(selectedRow, 6)),
+                    String.valueOf(tbl_Attendance.getValueAt(selectedRow, 7)),
+                    newStatus, "Attendance approved successfully!");
+            tbl_Attendance.setValueAt(newStatus, selectedRow, 13);
+
+            JOptionPane.showMessageDialog(null, "Attendance approved successfully!");
+             this.dispose();
+        } else {
+            JOptionPane.showMessageDialog(null, "Only entries with 'Pending' status can be approved.",
+                                          "Approval Denied", JOptionPane.WARNING_MESSAGE);
+           this.dispose();
+        }
+    } else {
+        JOptionPane.showMessageDialog(null, "Please select an attendance entry to approve.");
+    }
+
+    }//GEN-LAST:event_btn_attApproveActionPerformed
+
+    private void btn_attRejectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_attRejectActionPerformed
+    // Get the selected row index
+    int selectedRow = tbl_Attendance.getSelectedRow();
+
+    if (selectedRow != -1) { // Ensure a row is selected
+        // Get the Employee ID (assuming Employee ID is in column 0)
+        String empID = (String) tbl_Attendance.getValueAt(selectedRow, 0);
+
+        // Get the current attendance status (assuming it's in column 13)
+        String currentAttendanceStatus = (String) tbl_Attendance.getValueAt(selectedRow, 13);
+
+        // Check if the current attendance status is "Pending" before rejecting
+        if ("Pending".equalsIgnoreCase(currentAttendanceStatus)) {
+            // Update attendance status to "Rejected"
+            String newStatus = "Rejected";
+            CSVHandler.updateAttendanceStatus(empID,
+                    String.valueOf(tbl_Attendance.getValueAt(selectedRow, 6)),
+                    String.valueOf(tbl_Attendance.getValueAt(selectedRow, 7)),
+                    newStatus, "Attendance rejected successfully!");
+            tbl_Attendance.setValueAt(newStatus, selectedRow, 13);
+
+            JOptionPane.showMessageDialog(null, "Attendance rejected successfully!");
+            this.dispose();
+        } else {
+            JOptionPane.showMessageDialog(null, "Only entries with 'Pending' status can be rejected.",
+                                          "Rejection Denied", JOptionPane.WARNING_MESSAGE);
+            this.dispose();
+        }
+    } else {
+        JOptionPane.showMessageDialog(null, "Please select an attendance entry to reject.");
+    }
+
+    }//GEN-LAST:event_btn_attRejectActionPerformed
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(frm_EmpAttLeaveApproval.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(frm_EmpAttLeaveApproval.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(frm_EmpAttLeaveApproval.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(frm_EmpAttLeaveApproval.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+
+
+
+
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new frm_EmpAttLeaveApproval().setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btn_attApprove;
+    private javax.swing.JButton btn_attReject;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable tbl_Attendance;
+    // End of variables declaration//GEN-END:variables
+}

@@ -1,0 +1,39 @@
+Native isolated workflow assurance passed: 38 checks.
+PASS Real isolated server identity
+PASS CRUD fixture ID unoccupied
+PASS Unused native fixture 99012
+PASS Seeded native fixture 99012
+PASS Unused native fixture 99013
+PASS Seeded native fixture 99013
+PASS Disposable 99012 authenticated
+PASS Native employee Save persists a new employee
+PASS Native employee Edit/Save persists changed phone
+PASS Native compensation edit persists salary
+PASS Compensation editing preserves every employee profile field
+PASS Add compensation accepts an existing employee identifier
+PASS Native Add compensation Save creates the missing record
+PASS Compensation creation preserves profile and inserts missing statutory IDs
+PASS Duplicate compensation rejected
+PASS Unknown employee compensation rejected
+PASS Nonfinite compensation rejected
+PASS Negative compensation rejected
+PASS Existing statutory IDs receive validated submitted values
+PASS Audit failure rejects compensation creation
+PASS Audit failure rolls back both salary tables and preserves profile
+PASS Identifier collision rejects compensation creation
+PASS Identifier collision preserves the other employee and rolls back salary insert
+PASS Ambiguous employee statutory rows rejected
+PASS Ambiguous statutory rows remain unchanged and compensation rolls back
+PASS Disposable 99013 authenticated
+PASS Native employee request Submit persists pending ledger row
+PASS Second native request remains a distinct key
+PASS Native request edit updates its original key without inserting a duplicate
+PASS Rejected request edit preserves original object and database key
+PASS Employee cannot create compensation
+PASS Disposable 99012 authenticated
+PASS Native attendance Approve persists exact selected row
+PASS Native attendance Reject persists second row
+PASS Native payroll Verify persists status
+PASS Native payroll Approve persists status
+PASS Native payroll Undo restores pending
+PASS Actual audit chain remains valid after native workflow mutations

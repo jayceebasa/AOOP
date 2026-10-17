@@ -1,0 +1,13 @@
+{
+  "protected_accounts": 34,
+  "atomic_roundtrip_validated": true,
+  "previous_ciphertext_retained": true,
+  "database_credentials_changed": false,
+  "plaintext_secrets_published": false,
+  "issue_and_resolution": "Initial PowerShell Set-Content added a newline to DPAPI hex; trim ciphertext whitespace on read (never password whitespace), then atomically replace with validated ciphertext without newline.",
+  "local_retrieval_script": "success; actual32character temporary credential returned privately, not published",
+  "windows_serialization_issue": "Windows PowerShell5 depth/array serialization produced wrapper/string entries. All34 username/password pairs recovered without losing values. Parent now passes canonical JSON unchanged; no PowerShell reserialization.",
+  "escrow_format_recovery": "success; original ciphertext retained",
+  "verified_against_actual_isolated_accounts": 34,
+  "verification_output": "Protected escrow proofs verified against isolated accounts: 34"
+}

@@ -1,0 +1,8 @@
+{
+  "checks": 2,
+  "passed": true,
+  "command": "python tools/test_integrity_gates.py",
+  "observed": "Optimized Python rejects malformed audit archive and modified dependency",
+  "scope": "Synthetic temporary files; no original database writes",
+  "recorded_at": "2026-10-16T21:26:20.121764+00:00"
+}

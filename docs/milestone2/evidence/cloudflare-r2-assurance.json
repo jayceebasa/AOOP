@@ -1,0 +1,87 @@
+{
+  "recorded_at_utc": "2026-10-17T13:12:35.541912+00:00",
+  "scope": "Live Cloudflare R2 owned private bucket; actual aoop_m2 audit snapshot plus disposable denial fixtures",
+  "assertions": 20,
+  "outcomes": [
+    "Named bucket has the matching local ownership marker",
+    "Owned bucket uses Standard storage",
+    "Public managed r2.dev domain is disabled",
+    "No public custom domain is enabled",
+    "Active audit-prefix seven-day bucket lock confirmed via read-only identity",
+    "Eight-day expiry rule configured; actual future expiration is not yet observed",
+    "Actual off-host audit download matches checksum and full chain",
+    "Downloaded protected manifest matches the local verification receipt",
+    "Anonymous S3 read of an existing audit object is rejected",
+    "Backup writer cannot delete an object under the active lock",
+    "Backup writer cannot overwrite an object under the active lock",
+    "Bootstrap S3 identity cannot delete a currently locked object",
+    "Read-only configuration identity cannot change bucket locks",
+    "Object-only writer cannot change configuration through the REST API",
+    "Scoped writer cannot read an existing object in a separate owned test bucket",
+    "Scoped writer cannot write into the separate owned test bucket",
+    "Damaged chain rejected before any remote request",
+    "Actual audit backup remains recoverable after denial scenarios",
+    "Owned bucket storage is below the conservative 256 MiB ceiling",
+    "Recorded integration request counts remain below conservative daily/monthly ceilings"
+  ],
+  "denials": [
+    {
+      "scenario": "Anonymous S3 read of an existing audit object is rejected",
+      "code": "InvalidArgument",
+      "http_status": 400
+    },
+    {
+      "scenario": "Backup writer cannot delete an object under the active lock",
+      "code": "ObjectLockedByBucketPolicy",
+      "http_status": 409
+    },
+    {
+      "scenario": "Backup writer cannot overwrite an object under the active lock",
+      "code": "ObjectLockedByBucketPolicy",
+      "http_status": 409
+    },
+    {
+      "scenario": "Bootstrap S3 identity cannot delete a currently locked object",
+      "code": "ObjectLockedByBucketPolicy",
+      "http_status": 409
+    },
+    {
+      "scenario": "Read-only configuration identity cannot change bucket locks",
+      "codes": [
+        10000
+      ],
+      "http_status": 403
+    },
+    {
+      "scenario": "Object-only writer cannot change configuration through the REST API",
+      "codes": [
+        10000
+      ],
+      "http_status": 403
+    },
+    {
+      "scenario": "Scoped writer cannot read an existing object in a separate owned test bucket",
+      "code": "AccessDenied",
+      "http_status": 403
+    },
+    {
+      "scenario": "Scoped writer cannot write into the separate owned test bucket",
+      "code": "AccessDenied",
+      "http_status": 403
+    }
+  ],
+  "retained_events": 302,
+  "stored_bytes": 431163,
+  "objects": 8,
+  "request_budget": {
+    "month": "2026-10",
+    "monthly": 96,
+    "day": "2026-10-17",
+    "daily": 96
+  },
+  "offhost_storage_verified": true,
+  "independent_administrator_custody_proven": false,
+  "future_lifecycle_expiration_observed": false,
+  "cost": "Configured within the metered free allowance; no provider hard-zero-cost guarantee",
+  "boundary": "Cloudflare administrators can remove locks; bootstrap token remains on the provisioning PC; not S3 COMPLIANCE or independently administered custody"
+}

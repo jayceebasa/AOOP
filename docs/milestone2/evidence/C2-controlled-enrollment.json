@@ -1,0 +1,11 @@
+{
+  "initial_enrolled": 34,
+  "newly_enrolled_this_run": 0,
+  "bcrypt_cost": 12,
+  "retry_duration_ms": 34,
+  "escrow_protected_before_commit": true,
+  "escrow": "DPAPI CurrentUser in private runtime",
+  "legacy_sha_wrapped_in_bcrypt": false,
+  "shared_default_login": "denied",
+  "original_database_writes": 0
+}

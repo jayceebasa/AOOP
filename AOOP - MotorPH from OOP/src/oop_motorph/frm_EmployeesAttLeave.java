@@ -1,0 +1,574 @@
+package oop_motorph;
+
+import javax.swing.table.DefaultTableModel;
+import java.util.List;
+import javax.swing.JOptionPane;
+import java.awt.*;
+import java.awt.Cursor;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+
+public class frm_EmployeesAttLeave extends javax.swing.JFrame implements WorkspaceScreen {
+
+    /** Code-led layout. The archived NetBeans .form layout is retired. */
+    @Override public void composeWorkspace() {
+        WorkspaceShell.bindNavigation(this,"profile",btn_MyRecords);
+        WorkspaceShell.bindNavigation(this,"employees",btn_EmpRecords);
+        WorkspaceShell.bindNavigation(this,"compensation",btn_SalaryAndStatutory);
+        WorkspaceShell.bindNavigation(this,"requests",btn_LeaveMgt);
+        WorkspaceShell.bindNavigation(this,"processing",btn_PayrollSummary);
+        WorkspaceShell.bindNavigation(this,"logout",btn_Logout);
+        javax.swing.JButton review=new javax.swing.JButton("Review requests");
+        review.addActionListener(e->WorkspaceShell.open(this,"request-review"));
+        WorkspaceShell.mount(this,"Attendance & leave","Review employee time logs and leave requests.","requests",WorkspaceUI.table(tbl_Employees),
+            WorkspaceUI.actions(WorkspaceUI.primary(btn_AddEmp,"Add request"),WorkspaceUI.secondary(btn_ViewEmp,"Open request"),WorkspaceUI.danger(btn_DelEmp,"Delete"),WorkspaceUI.secondary(btn_refresh,"Refresh"),WorkspaceUI.secondary(review,"Review requests")));
+        tbl_Employees.putClientProperty("motorph.emptyMessage","No time logs or leave requests found. Add a request or refresh after attendance is recorded.");
+        final boolean allowed0=btn_ViewEmp.isEnabled();
+        final boolean allowed1=btn_DelEmp.isEnabled();
+        WorkspaceUI.bindSelection(tbl_Employees,()->{
+            boolean selected=WorkspaceUI.hasSelection(tbl_Employees);
+            btn_ViewEmp.setEnabled(allowed0&&selected);
+            btn_DelEmp.setEnabled(allowed1&&selected&&"Pending".equalsIgnoreCase(String.valueOf(tbl_Employees.getValueAt(tbl_Employees.getSelectedRow(),13))));
+        });
+
+    }
+
+    public frm_EmployeesAttLeave() {
+        AuthorizationService.requireHr();
+        initComponents();
+        AppTheme.finish(this);
+
+        // Initial bounds; the responsive workspace owns the mounted layout.
+        setResizable(true);
+        setTitle("Employee Attendance & Leave");
+        setSize(1180, 800);
+        setMinimumSize(new java.awt.Dimension(800, 600));
+        setLocationRelativeTo(null); // Center the window after setting size
+
+        // Apply modern styling after components are initialized
+
+
+
+        // Display attendance data in table
+        displayAttendanceData();
+
+        EmpDetails employee = EmpUserSession.getInstance().getCurrentUser();
+        String role = EmpUserSession.getInstance().getRole();
+
+        if (employee != null && role != null) {
+            // Set role-based access
+            setRoleBasedAccess(role);
+        } else {
+            JOptionPane.showMessageDialog(this, "No employee data or role found!", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void displayAttendanceData() {
+        List<EmpAttLeave> attendanceList = CSVHandler.getAttendanceData();
+        DefaultTableModel model = (DefaultTableModel) tbl_Employees.getModel();
+
+        // Disable table editing
+        tbl_Employees.setDefaultEditor(Object.class, null);
+
+        // Clear existing rows
+        model.setRowCount(0);
+
+        // Add all attendance records to the table
+        for (EmpAttLeave att : attendanceList) {
+            model.addRow(new Object[]{
+                att.getEmpID(), att.getFirstName(), att.getLastName(), att.getEmployeeStatus(),
+                att.getPosition(), att.getImmediateSupervisor(), att.getAttDateFrom(), att.getAttDateTo(),
+                att.getTimeIn(), att.getTimeOut(), att.getHoursWorked(), att.getDuration(),
+                att.getAttendanceType(), att.getAttendanceStatus(), att.getVlCount(),
+                att.getVlUsed(), att.getVlBalance(), att.getSlCount(), att.getSlUsed(), att.getSlBalance()
+            });
+        }
+        model.fireTableDataChanged();
+    }
+
+    private void setRoleBasedAccess(String role) {
+        // Implementation for role-based access
+        switch (role.toUpperCase()) {
+            case "EMPLOYEE":
+                btn_AddEmp.setEnabled(false);
+                btn_DelEmp.setEnabled(false);
+                btn_ViewEmp.setEnabled(true);
+                btn_refresh.setEnabled(true);
+                break;
+            case "HR":
+                btn_AddEmp.setEnabled(true);
+                btn_DelEmp.setEnabled(true);
+                btn_ViewEmp.setEnabled(true);
+                btn_refresh.setEnabled(true);
+                break;
+            default:
+                btn_AddEmp.setEnabled(false);
+                btn_DelEmp.setEnabled(false);
+                btn_ViewEmp.setEnabled(false);
+                btn_refresh.setEnabled(false);
+                break;
+        }
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jPanel1 = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tbl_Employees = new javax.swing.JTable();
+        btn_ViewEmp = new javax.swing.JButton();
+        btn_AddEmp = new javax.swing.JButton();
+        btn_DelEmp = new javax.swing.JButton();
+        btn_refresh = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel();
+        btn_Profile = new javax.swing.JButton();
+        btn_LeaveMgt = new javax.swing.JButton();
+        btn_SalaryAndStatutory = new javax.swing.JButton();
+        btn_PayrollSummary = new javax.swing.JButton();
+        jPanel4 = new javax.swing.JPanel();
+        btn_MyRecords = new javax.swing.JButton();
+        btn_EmpRecords = new javax.swing.JButton();
+        btn_Logout = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jPanel5 = new javax.swing.JPanel();
+        jPanel6 = new javax.swing.JPanel();
+        jLabel5 = new javax.swing.JLabel();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setBorder(javax.swing.BorderFactory.createCompoundBorder());
+
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel2.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, null, java.awt.Color.lightGray, null, null));
+
+        tbl_Employees.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "Employee ID", "First Name", "Last Name", "Status", "Position", "Immediate Supervisor", "Date From", "Date To", "Time In", "Time Out", "Hrs Worked", "Duration", "AttendanceType", "AttendanceStatus", "VLCount", "VLUsed", "VLBal", "SLCount", "SLUsed", "SLBal"
+            }
+        ));
+        jScrollPane1.setViewportView(tbl_Employees);
+
+        btn_ViewEmp.setBackground(new java.awt.Color(0, 0, 204));
+        btn_ViewEmp.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btn_ViewEmp.setForeground(new java.awt.Color(255, 255, 255));
+        btn_ViewEmp.setText("View Attendance");
+        btn_ViewEmp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_ViewEmpActionPerformed(evt);
+            }
+        });
+
+        btn_AddEmp.setBackground(new java.awt.Color(0, 0, 204));
+        btn_AddEmp.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btn_AddEmp.setForeground(new java.awt.Color(255, 255, 255));
+        btn_AddEmp.setText("ADD");
+        btn_AddEmp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_AddEmpActionPerformed(evt);
+            }
+        });
+
+        btn_DelEmp.setBackground(new java.awt.Color(0, 0, 204));
+        btn_DelEmp.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btn_DelEmp.setForeground(new java.awt.Color(255, 255, 255));
+        btn_DelEmp.setText("DEL");
+        btn_DelEmp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_DelEmpActionPerformed(evt);
+            }
+        });
+
+        btn_refresh.setBackground(new java.awt.Color(0, 0, 204));
+        btn_refresh.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btn_refresh.setForeground(new java.awt.Color(255, 255, 255));
+        btn_refresh.setText("REF");
+        btn_refresh.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_refreshActionPerformed(evt);
+            }
+        });
+
+
+
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
+        jLabel2.setText("MotorPH");
+
+        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
+
+
+
+        btn_Profile.setBackground(new java.awt.Color(0, 0, 204));
+        btn_Profile.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btn_Profile.setForeground(new java.awt.Color(255, 255, 255));
+        btn_Profile.setText("Employees Profile");
+        btn_Profile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_ProfileActionPerformed(evt);
+            }
+        });
+
+        btn_LeaveMgt.setBackground(new java.awt.Color(0, 0, 204));
+        btn_LeaveMgt.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btn_LeaveMgt.setForeground(new java.awt.Color(255, 255, 255));
+        btn_LeaveMgt.setText("Employees Attendance & Leave");
+        btn_LeaveMgt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_LeaveMgtActionPerformed(evt);
+            }
+        });
+
+        btn_SalaryAndStatutory.setBackground(new java.awt.Color(0, 0, 204));
+        btn_SalaryAndStatutory.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btn_SalaryAndStatutory.setForeground(new java.awt.Color(255, 255, 255));
+        btn_SalaryAndStatutory.setText("Employees Salary & Statutory");
+        btn_SalaryAndStatutory.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_SalaryAndStatutoryActionPerformed(evt);
+            }
+        });
+
+        btn_PayrollSummary.setBackground(new java.awt.Color(0, 0, 204));
+        btn_PayrollSummary.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btn_PayrollSummary.setForeground(new java.awt.Color(255, 255, 255));
+        btn_PayrollSummary.setText("Payroll Processing");
+        btn_PayrollSummary.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_PayrollSummaryActionPerformed(evt);
+            }
+        });
+
+
+
+        btn_MyRecords.setBackground(new java.awt.Color(102, 102, 102));
+        btn_MyRecords.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btn_MyRecords.setForeground(new java.awt.Color(255, 255, 255));
+        btn_MyRecords.setText("My Records");
+        btn_MyRecords.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_MyRecordsActionPerformed(evt);
+            }
+        });
+
+        btn_EmpRecords.setBackground(new java.awt.Color(102, 102, 102));
+        btn_EmpRecords.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btn_EmpRecords.setForeground(new java.awt.Color(255, 255, 255));
+        btn_EmpRecords.setText("Employee Records");
+        btn_EmpRecords.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_EmpRecordsActionPerformed(evt);
+            }
+        });
+
+        btn_Logout.setBackground(new java.awt.Color(102, 102, 102));
+        btn_Logout.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btn_Logout.setForeground(new java.awt.Color(255, 255, 255));
+        btn_Logout.setText("Logout");
+        btn_Logout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_LogoutActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/oop_motorph/img/img_myrecord.png"))); // NOI18N
+
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/oop_motorph/img/img_emprecords.png"))); // NOI18N
+
+        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/oop_motorph/img/img_logout.png"))); // NOI18N
+
+
+
+        jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel5.setText("Version 1.30");
+
+
+
+        jPanel1.getAccessibleContext().setAccessibleName("Employee Records");
+
+
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void btn_PayrollSummaryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_PayrollSummaryActionPerformed
+        new frm_EmployeesPayrollProcess().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btn_PayrollSummaryActionPerformed
+
+    private void btn_SalaryAndStatutoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_SalaryAndStatutoryActionPerformed
+        new frm_EmployeesSalary().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btn_SalaryAndStatutoryActionPerformed
+
+    private void btn_LeaveMgtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_LeaveMgtActionPerformed
+        // Already on Attendance & Leave page
+    }//GEN-LAST:event_btn_LeaveMgtActionPerformed
+
+    private void btn_ProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_ProfileActionPerformed
+        new frm_EmployeesRecords().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btn_ProfileActionPerformed
+
+    private void btn_MyRecordsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_MyRecordsActionPerformed
+        new frm_EmpProfile().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btn_MyRecordsActionPerformed
+
+    private void btn_LogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_LogoutActionPerformed
+        CSVHandler.handleLogout(this);
+    }//GEN-LAST:event_btn_LogoutActionPerformed
+
+    private void btn_EmpRecordsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_EmpRecordsActionPerformed
+        new frm_EmployeesRecords().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btn_EmpRecordsActionPerformed
+
+    private void btn_ViewEmpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_ViewEmpActionPerformed
+        int selectedRow = tbl_Employees.getSelectedRow();
+        if (selectedRow >= 0) {
+            try {
+                // Debugging: Check the number of columns
+                int columnCount = tbl_Employees.getColumnCount();
+                System.out.println("Total Columns: " + columnCount);
+
+                if (columnCount < 20) { // Ensure we have all 20 columns for attendance data
+                    JOptionPane.showMessageDialog(this, "Table column count mismatch. Expected 20 columns.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                // Define formatters for date and time conversion
+                DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+
+                // Get the attendance data from the selected row
+                String empID = (String) tbl_Employees.getValueAt(selectedRow, 0);
+                String firstName = (String) tbl_Employees.getValueAt(selectedRow, 1);
+                String lastName = (String) tbl_Employees.getValueAt(selectedRow, 2);
+                String employeeStatus = (String) tbl_Employees.getValueAt(selectedRow, 3);
+                String position = (String) tbl_Employees.getValueAt(selectedRow, 4);
+                String immediateSupervisor = (String) tbl_Employees.getValueAt(selectedRow, 5);
+
+                // Convert date and time data properly
+                LocalDate dateFrom = null;
+                LocalDate dateTo = null;
+                LocalTime timeIn = null;
+                LocalTime timeOut = null;
+
+                try {
+                    Object dateFromObj = tbl_Employees.getValueAt(selectedRow, 6);
+                    Object dateToObj = tbl_Employees.getValueAt(selectedRow, 7);
+                    Object timeInObj = tbl_Employees.getValueAt(selectedRow, 8);
+                    Object timeOutObj = tbl_Employees.getValueAt(selectedRow, 9);
+
+                    // Handle date conversion
+                    if (dateFromObj instanceof LocalDate) {
+                        dateFrom = (LocalDate) dateFromObj;
+                    } else if (dateFromObj != null) {
+                        dateFrom = LocalDate.parse(dateFromObj.toString(), dateFormatter);
+                    }
+
+                    if (dateToObj instanceof LocalDate) {
+                        dateTo = (LocalDate) dateToObj;
+                    } else if (dateToObj != null) {
+                        dateTo = LocalDate.parse(dateToObj.toString(), dateFormatter);
+                    }
+
+                    // Handle time conversion
+                    if (timeInObj instanceof LocalTime) {
+                        timeIn = (LocalTime) timeInObj;
+                    } else if (timeInObj != null) {
+                        timeIn = LocalTime.parse(timeInObj.toString(), timeFormatter);
+                    }
+
+                    if (timeOutObj instanceof LocalTime) {
+                        timeOut = (LocalTime) timeOutObj;
+                    } else if (timeOutObj != null) {
+                        timeOut = LocalTime.parse(timeOutObj.toString(), timeFormatter);
+                    }
+                } catch (DateTimeParseException e) {
+                    JOptionPane.showMessageDialog(this, "Invalid date/time format in the selected record: " + e.getMessage(),
+                                                "Date/Time Format Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                // Get numeric data safely
+                double hoursWorked = parseDoubleSafe(tbl_Employees.getValueAt(selectedRow, 10));
+                double duration = parseDoubleSafe(tbl_Employees.getValueAt(selectedRow, 11));
+
+                String attendanceType = (String) tbl_Employees.getValueAt(selectedRow, 12);
+                String attendanceStatus = (String) tbl_Employees.getValueAt(selectedRow, 13);
+
+                // Get leave balance data safely
+                double vlCount = parseDoubleSafe(tbl_Employees.getValueAt(selectedRow, 14));
+                double vlUsed = parseDoubleSafe(tbl_Employees.getValueAt(selectedRow, 15));
+                double vlBal = parseDoubleSafe(tbl_Employees.getValueAt(selectedRow, 16));
+                double slCount = parseDoubleSafe(tbl_Employees.getValueAt(selectedRow, 17));
+                double slUsed = parseDoubleSafe(tbl_Employees.getValueAt(selectedRow, 18));
+                double slBal = parseDoubleSafe(tbl_Employees.getValueAt(selectedRow, 19));
+
+                // Create the EmpAttLeave object with properly converted data
+                EmpAttLeave employeeAttendance = new EmpAttLeave(
+                    empID, firstName, lastName, employeeStatus, position, immediateSupervisor,
+                    dateFrom, dateTo, timeIn, timeOut, hoursWorked, duration,
+                    attendanceType, attendanceStatus, vlCount, vlUsed, vlBal,
+                    slCount, slUsed, slBal
+                );
+
+                // Open the attendance request form and pass the data
+                frm_EmpAttLeaveRequest viewForm = new frm_EmpAttLeaveRequest(employeeAttendance, false);
+                viewForm.setVisible(true);
+
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Error viewing attendance: " + e.getMessage(),
+                                            "Error", JOptionPane.ERROR_MESSAGE);
+                e.printStackTrace();
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Please select an attendance record to view.",
+                                        "No Selection", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_btn_ViewEmpActionPerformed
+
+    // Helper method to safely parse doubles
+    private double parseDoubleSafe(Object value) {
+        try {
+            if (value == null) return 0.0;
+            return Double.parseDouble(value.toString());
+        } catch (NumberFormatException e) {
+            return 0.0;  // Default value if parsing fails
+        }
+    }
+
+    private void btn_AddEmpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_AddEmpActionPerformed
+        // Open add attendance/leave dialog
+        frm_EmpAddAttLeave addForm = new frm_EmpAddAttLeave();
+        addForm.setVisible(true);
+
+        // Refresh data after dialog is closed (in case data was added)
+        displayAttendanceData();
+    }//GEN-LAST:event_btn_AddEmpActionPerformed
+
+    private void btn_DelEmpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_DelEmpActionPerformed
+        int selectedRow = tbl_Employees.getSelectedRow();
+        if (selectedRow >= 0) {
+            // Get the attendance record details from the selected row
+            String empID = (String) tbl_Employees.getValueAt(selectedRow, 0);
+            String firstName = (String) tbl_Employees.getValueAt(selectedRow, 1);
+            String lastName = (String) tbl_Employees.getValueAt(selectedRow, 2);
+
+            // Confirm deletion
+            int confirm = JOptionPane.showConfirmDialog(this,
+                "Are you sure you want to delete attendance record for: " + firstName + " " + lastName + " (ID: " + empID + ")?",
+                "Confirm Delete",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE);
+
+            if (confirm == JOptionPane.YES_OPTION) {
+                try {
+                    // Delete the attendance record - you may need to implement this method in CSVHandler
+                    // CSVHandler.deleteAttendanceRecord(empID, dateFrom, dateTo); // Example
+
+                    // For now, just refresh the table
+                    displayAttendanceData();
+
+                    JOptionPane.showMessageDialog(this,
+                        "Attendance record for " + firstName + " " + lastName + " has been deleted successfully.",
+                        "Delete Success",
+                        JOptionPane.INFORMATION_MESSAGE);
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(this,
+                        "Error deleting attendance record: " + e.getMessage(),
+                        "Delete Error",
+                        JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Please select an attendance record to delete.",
+                                        "No Selection", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_btn_DelEmpActionPerformed
+
+    private void btn_refreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_refreshActionPerformed
+        displayAttendanceData();
+    }//GEN-LAST:event_btn_refreshActionPerformed
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(frm_EmployeesAttLeave.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(frm_EmployeesAttLeave.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(frm_EmployeesAttLeave.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(frm_EmployeesAttLeave.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new frm_EmployeesAttLeave().setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btn_AddEmp;
+    private javax.swing.JButton btn_DelEmp;
+    private javax.swing.JButton btn_EmpRecords;
+    private javax.swing.JButton btn_LeaveMgt;
+    private javax.swing.JButton btn_Logout;
+    private javax.swing.JButton btn_MyRecords;
+    private javax.swing.JButton btn_PayrollSummary;
+    private javax.swing.JButton btn_Profile;
+    private javax.swing.JButton btn_SalaryAndStatutory;
+    private javax.swing.JButton btn_ViewEmp;
+    private javax.swing.JButton btn_refresh;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable tbl_Employees;
+    // End of variables declaration//GEN-END:variables
+}

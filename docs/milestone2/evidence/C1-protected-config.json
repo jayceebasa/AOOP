@@ -1,0 +1,9 @@
+{
+  "encryption": "Windows DPAPI CurrentUser",
+  "plaintext_password_in_ciphertext_file": false,
+  "corrupt_configuration": "denied",
+  "normal_current_user_decryption": "success",
+  "wrong_windows_user_test": "Not run; scope binding documented by Microsoft, not runtime-proven here",
+  "private_acl": "Current Windows user and SYSTEM only",
+  "shared_root_rotation": "Not performed; isolated replacement secret rotated and old secret denied"
+}

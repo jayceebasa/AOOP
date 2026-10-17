@@ -1,0 +1,22 @@
+{
+  "control": "C1",
+  "new_credential": "success",
+  "superseded_isolated_credential": "denied",
+  "require_secure_transport": true,
+  "client_tls": "VERIFY_IDENTITY",
+  "restricted_account": "motorph_m2_app@127.0.0.1",
+  "grants": [
+    "GRANT USAGE ON *.* TO `motorph_m2_app`@`127.0.0.1`",
+    "GRANT SELECT ON `aoop_m2`.* TO `motorph_m2_app`@`127.0.0.1`",
+    "GRANT INSERT ON `aoop_m2`.`addresses` TO `motorph_m2_app`@`127.0.0.1`",
+    "GRANT DELETE ON `aoop_m2`.`attendance` TO `motorph_m2_app`@`127.0.0.1`",
+    "GRANT INSERT, UPDATE, DELETE ON `aoop_m2`.`compensation` TO `motorph_m2_app`@`127.0.0.1`",
+    "GRANT INSERT, UPDATE, DELETE ON `aoop_m2`.`employees` TO `motorph_m2_app`@`127.0.0.1`",
+    "GRANT INSERT ON `aoop_m2`.`employeestatuses` TO `motorph_m2_app`@`127.0.0.1`",
+    "GRANT INSERT, UPDATE, DELETE ON `aoop_m2`.`governmentids` TO `motorph_m2_app`@`127.0.0.1`",
+    "GRANT INSERT ON `aoop_m2`.`positions` TO `motorph_m2_app`@`127.0.0.1`",
+    "GRANT INSERT, UPDATE (`must_change_password`, `password`) ON `aoop_m2`.`users` TO `motorph_m2_app`@`127.0.0.1`"
+  ],
+  "original_schema_and_shared_root_untouched": true,
+  "issue_and_resolution": "First integration run exposed required employee-deletion cleanup of attendance; added DELETE on only the attendance table. Payroll remains SELECT-only; DDL/admin/unrelated-schema rights remain denied."
+}

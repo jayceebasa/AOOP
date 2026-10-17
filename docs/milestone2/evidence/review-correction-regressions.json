@@ -1,0 +1,13 @@
+{
+  "checks": [
+    "Escrow atomic replacement retains exact prior ciphertext: success",
+    "Windows PowerShell escrow serialization preserves canonical username/password entries: success",
+    "Failed escrow update preserves committed map: denied safely",
+    "Inherited JVM database override: denied before connection",
+    "Profile label and actual JDBC URL mismatch: denied before connection",
+    "Occupied test account causes abort and remains untouched: success"
+  ],
+  "assertions": 6,
+  "scope": "Private synthetic escrow and isolated aoop_m2 only",
+  "original_database_writes": 0
+}

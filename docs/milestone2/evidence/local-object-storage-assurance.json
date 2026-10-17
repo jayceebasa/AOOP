@@ -1,0 +1,66 @@
+{
+  "recorded_at_utc": "2026-10-17T13:13:43.758760+00:00",
+  "scope": "Real RustFS1.0.2 in owned Docker Desktop project on this same Windows PC",
+  "assertions": 18,
+  "outcomes": [
+    "Confirmed Docker Desktop Linux context",
+    "Owned dedicated Compose project",
+    "S3 and console ports bind loopback only",
+    "Bucket versioning enabled",
+    "Seven-day COMPLIANCE default retention configured",
+    "Exact uploaded version downloaded and full audit chain verified",
+    "Anonymous archive read denied",
+    "Backup writer cannot delete retained archive version",
+    "Backup writer cannot change bucket policy",
+    "Backup writer cannot upload outside audit prefix",
+    "Backup writer cannot read outside audit prefix",
+    "S3 root cannot delete an active COMPLIANCE-protected version",
+    "S3 root cannot shorten active compliance retention",
+    "Corrupt local audit chain rejected before upload",
+    "Dedicated container restart preserves exact archive version and writer access",
+    "Restored archive chain remains valid after container restart",
+    "Unavailable S3 makes the archive wrapper fail visibly",
+    "Unavailable S3 preserves the newly verified local archive"
+  ],
+  "denials": [
+    {
+      "scenario": "Anonymous archive read denied",
+      "s3_error_code": "AccessDenied",
+      "http_status": 403
+    },
+    {
+      "scenario": "Backup writer cannot delete retained archive version",
+      "s3_error_code": "AccessDenied",
+      "http_status": 403
+    },
+    {
+      "scenario": "Backup writer cannot change bucket policy",
+      "s3_error_code": "AccessDenied",
+      "http_status": 403
+    },
+    {
+      "scenario": "Backup writer cannot upload outside audit prefix",
+      "s3_error_code": "AccessDenied",
+      "http_status": 403
+    },
+    {
+      "scenario": "Backup writer cannot read outside audit prefix",
+      "s3_error_code": "AccessDenied",
+      "http_status": 403
+    },
+    {
+      "scenario": "S3 root cannot delete an active COMPLIANCE-protected version",
+      "s3_error_code": "AccessDenied",
+      "http_status": 403
+    },
+    {
+      "scenario": "S3 root cannot shorten active compliance retention",
+      "s3_error_code": "AccessDenied",
+      "http_status": 403
+    }
+  ],
+  "retained_events": 302,
+  "independent_offhost_custody": false,
+  "boundary": "Host administrator and loss of this PC/volume are outside the retention guarantee",
+  "fixture_note": "One tiny scope-denial object is intentionally retained for seven days; no protected archive deletion attempted after denial."
+}
